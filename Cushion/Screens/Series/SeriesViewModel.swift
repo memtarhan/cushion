@@ -9,6 +9,8 @@
 import Foundation
 
 class SeriesViewModel: ObservableObject {
+    @Published var popular: SeriesListModel?
+
     private let service: SeriesListService
 
     init() {
@@ -17,7 +19,13 @@ class SeriesViewModel: ObservableObject {
 
     func fetchSeries() {
         Task(priority: .background) {
-            try? await self.service.getPopular(at: 1)
+            if let response = try? await self.service.getPopular(at: 1) {
+                let popularItems = response.results.map { result in
+                    SeriesOverviewModel(id: result.id, poster: result.poster, genres: result.genres)
+                }
+
+                popular = SeriesListModel(description: "Popular", items: popularItems)
+            }
         }
     }
 }
