@@ -33,3 +33,25 @@ struct ContentResultResponse: APIResponse {
     let genres: [String]
     let airDate: String
 }
+
+// MARK: - MovieDetailsResponse
+
+struct MovieDetailsResponse: APIResponse {
+    let id: String
+    let originalLanguage: String
+    let title: String
+    let overview: String
+    let poster: String
+    let backdrop: String
+    let genre: String
+    let releaseDate: String
+    let imdbRating: String
+    let imdbVotes: String
+    let awards: String
+    let rated: String
+    let boxOffice: String
+    let imdbPage: String
+    let homepage: String
+    let runtime: Int
+    let year: Int
+}

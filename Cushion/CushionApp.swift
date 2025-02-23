@@ -11,7 +11,7 @@ import SwiftUI
 struct CushionApp: App {
     var body: some Scene {
         WindowGroup {
-            SeriesScreen()
+            MoviesScreen()
         }
     }
 }
