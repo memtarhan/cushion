@@ -15,7 +15,7 @@ struct MoviesScreen: View {
         NavigationStack {
             VStack {
                 NavigationLink("Show Detail View") {
-                    MovieDetails(movieId: "movie_299")
+                    MovieDetailsScreen(movieId: "movie_299")
                 }
             }
         }

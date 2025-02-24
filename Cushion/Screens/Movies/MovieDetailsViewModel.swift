@@ -28,7 +28,12 @@ class MovieDetailsViewModel: ObservableObject {
                                             year: "\(response.year)",
                                             genre: response.genre,
                                             rated: response.rated,
-                                            imdbRating: response.imdbRating)
+                                            imdbRating: response.imdbRating,
+                                            awardsDescription: response.awards,
+                                            overview: response.overview,
+                                            director: response.director,
+                                            writer: response.writer,
+                                            cast: response.credits.map { MovieCreditModel(name: $0.name, character: $0.character, photo: $0.photo) })
             }
         }
     }

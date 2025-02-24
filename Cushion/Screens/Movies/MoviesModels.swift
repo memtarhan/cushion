@@ -15,4 +15,17 @@ struct MovieDetailsModel {
     let genre: String
     let rated: String
     let imdbRating: String
+    let awardsDescription: String
+    let overview: String
+    let director: String
+    let writer: String
+    let cast: [MovieCreditModel]
+}
+
+struct MovieCreditModel: Identifiable {
+    let name: String
+    let character: String
+    let photo: String
+
+    var id: String { name + character + photo }
 }

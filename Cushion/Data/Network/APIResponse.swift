@@ -54,4 +54,15 @@ struct MovieDetailsResponse: APIResponse {
     let homepage: String
     let runtime: Int
     let year: Int
+    let director: String
+    let writer: String
+    let credits: [MovieCreditResponse]
+}
+
+// MARK: - MovieCreditResponse
+
+struct MovieCreditResponse: APIResponse {
+    let name: String
+    let character: String
+    let photo: String
 }
