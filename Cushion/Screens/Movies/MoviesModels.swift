@@ -6,6 +6,12 @@
 //  Copyright © 2025 MEMTARHAN. All rights reserved.
 //
 
+struct MovieOverviewModel: Identifiable {
+    let id: String
+    let poster: String
+    let title: String
+}
+
 struct MovieDetailsModel {
     let poster: String
     let backdrop: String

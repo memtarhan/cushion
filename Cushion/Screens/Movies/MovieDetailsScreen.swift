@@ -102,8 +102,6 @@ struct MovieOverviewView: View {
             Text(awardsDescription)
                 .font(.headline.italic())
                 .foregroundStyle(.secondary)
-                .lineLimit(1)
-                .scaledToFit()
 
             Text(overview)
                 .font(.callout)

@@ -11,7 +11,12 @@ import SwiftUI
 struct CushionApp: App {
     var body: some Scene {
         WindowGroup {
-            MoviesScreen()
+            TabView {
+                MoviesScreen()
+                    .tabItem {
+                        Label("Movies", systemImage: "movieclapper.fill")
+                    }
+            }
         }
     }
 }
