@@ -23,25 +23,25 @@ class MoviesViewModel: ObservableObject {
 
     func handleData() {
         Task(priority: .background) {
-            if let response = try? await service.getNowPlaying(atPage: 1) {
+            if let response = try? await service.getMovies(forListCategory: .nowPlaying, page: 1) {
                 nowPlayingMovies = response.results.map { result in
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
                 }
             }
 
-            if let response = try? await service.getUpcoming(atPage: 1) {
+            if let response = try? await service.getMovies(forListCategory: .upcoming, page: 1) {
                 upcomingMovies = response.results.map { result in
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
                 }
             }
 
-            if let response = try? await service.getTopRated(atPage: 1) {
+            if let response = try? await service.getMovies(forListCategory: .topRated, page: 1) {
                 topRatedMovies = response.results.map { result in
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
                 }
             }
 
-            if let response = try? await service.getPopular(atPage: 1) {
+            if let response = try? await service.getMovies(forListCategory: .popular, page: 1) {
                 popularMovies = response.results.map { result in
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
                 }

@@ -23,7 +23,9 @@ struct MovieOverviewRow: View {
                     .scaledToFill()
                     .frame(width: imageWidth, height: imageHeight)
             } placeholder: {
-                ProgressView()
+                Image(systemName: "movieclapper")
+                    .frame(width: imageWidth, height: imageHeight)
+                    .background(.accent.opacity(0.1))
             }
         }
 
@@ -61,30 +63,70 @@ struct MoviesScreen: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Text("Popular")
-                        .font(.headline)
-                        .padding(.horizontal, 20)
+                    HStack {
+                        Text("Popular")
+                            .font(.headline)
+                            .padding(.horizontal, 20)
+                        Spacer()
+                        NavigationLink {
+                            MovieListScreen(listCategory: .popular)
+                        } label: {
+                            Text("See All...")
+                                .font(.subheadline)
+                                .padding()
+                        }
+                    }
                     MovieHorizontalPaginatedScrollView(data: viewModel.popularMovies)
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Now Playing")
-                        .font(.headline)
-                        .padding(.horizontal, 20)
+                    HStack {
+                        Text("Now Playing")
+                            .font(.headline)
+                            .padding(.horizontal, 20)
+                        Spacer()
+                        NavigationLink {
+                            MovieListScreen(listCategory: .nowPlaying)
+                        } label: {
+                            Text("See All...")
+                                .font(.subheadline)
+                                .padding()
+                        }
+                    }
                     MovieHorizontalPaginatedScrollView(data: viewModel.nowPlayingMovies)
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Upcoming")
-                        .font(.headline)
-                        .padding(.horizontal, 20)
+                    HStack {
+                        Text("Upcoming")
+                            .font(.headline)
+                            .padding(.horizontal, 20)
+                        Spacer()
+                        NavigationLink {
+                            MovieListScreen(listCategory: .upcoming)
+                        } label: {
+                            Text("See All...")
+                                .font(.subheadline)
+                                .padding()
+                        }
+                    }
                     MovieHorizontalPaginatedScrollView(data: viewModel.upcomingMovies)
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Top Rated")
-                        .font(.headline)
-                        .padding(.horizontal, 20)
+                    HStack {
+                        Text("Top Rated")
+                            .font(.headline)
+                            .padding(.horizontal, 20)
+                        Spacer()
+                        NavigationLink {
+                            MovieListScreen(listCategory: .topRated)
+                        } label: {
+                            Text("See All...")
+                                .font(.subheadline)
+                                .padding()
+                        }
+                    }
                     MovieHorizontalPaginatedScrollView(data: viewModel.topRatedMovies)
                 }
             }
