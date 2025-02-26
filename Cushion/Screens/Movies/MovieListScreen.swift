@@ -27,9 +27,18 @@ struct MovieListScreen: View {
                         ForEach(viewModel.movies) { movie in
                             MovieOverviewRow(data: movie)
                                 .frame(width: (proxy.size.width - 64) / 2)
+                                .onAppear {
+                                    viewModel.loadMoreIfNeeded(currentItem: movie)
+                                }
                         }
                     }
                     .padding(.horizontal)
+                    if viewModel.loading {
+                        ProgressView("Loading more...")
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .padding(.vertical)
+                    }
                 }
                 .navigationTitle(listCategory.title)
                 .navigationBarTitleDisplayMode(.inline)

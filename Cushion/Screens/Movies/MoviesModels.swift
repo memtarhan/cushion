@@ -8,24 +8,35 @@
 
 import Foundation
 
-enum MovieListCategory: String {
-    case popular
-    case topRated
-    case upcoming
-    case nowPlaying
+enum MovieListCategory: String, APIResponse {
+    case popular = "Popular"
+    case topRated = "Top Rated"
+    case upcoming = "Upcoming"
+    case nowPlaying = "Now Playing"
 
     var title: String {
+        rawValue
+    }
+    
+    var sortIndex: Int {
         switch self {
         case .popular:
-            return "Popular"
+            return 0
         case .topRated:
-            return "Top Rated"
+            return 1
         case .upcoming:
-            return "Upcoming"
+            return 2
         case .nowPlaying:
-            return "Now Playing"
+            return 3
         }
     }
+}
+
+struct MovieCategoryOverviewModel: Identifiable {
+    let category: MovieListCategory
+    let movies: [MovieOverviewModel]
+
+    var id: String { category.rawValue }
 }
 
 struct MovieOverviewModel: Identifiable {

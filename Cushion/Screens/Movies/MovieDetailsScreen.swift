@@ -150,8 +150,8 @@ struct MovieCastRow: View {
                 image
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 45, height: 45)
-                    .clipShape(Circle())
+                    .frame(width: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
             } placeholder: {
             }
 

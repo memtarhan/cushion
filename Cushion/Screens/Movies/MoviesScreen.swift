@@ -14,43 +14,73 @@ extension CGFloat {
     }
 }
 
+struct MoviesView: View {
+    var data: [MovieCategoryOverviewModel]
+
+    var body: some View {
+        ScrollView {
+            VStack {
+                ForEach(data) { movieCategoryModel in
+                    if movieCategoryModel.category == .popular {
+                        PopularMoviesSection(data: movieCategoryModel.movies)
+                    }
+                    if movieCategoryModel.category == .nowPlaying {
+                        NowPlayingMoviesSection(data: movieCategoryModel.movies)
+                    }
+                    if movieCategoryModel.category == .upcoming {
+                        UpcomingMoviesSection(data: movieCategoryModel.movies)
+                    }
+                    if movieCategoryModel.category == .topRated {
+                        TopRatedMoviesSection(data: movieCategoryModel.movies)
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct PopularMoviesSection: View {
     var data: [MovieOverviewModel]
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text("Popular")
-                    .font(.headline)
-                    .padding(.horizontal, 20)
-                Spacer()
-                NavigationLink {
-                    MovieListScreen(listCategory: .popular)
-                } label: {
-                    Text("See All...")
-                        .font(.subheadline)
-                        .padding()
-                }
-            }
+//            HStack {
+//                Text("Popular")
+//                    .font(.headline)
+//                    .padding(.horizontal, 20)
+//                Spacer()
+//                NavigationLink {
+//                    MovieListScreen(listCategory: .popular)
+//                } label: {
+//                    Text("See All...")
+//                        .font(.subheadline)
+//                        .padding()
+//                }
+//            }
 
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 0) {
                     ForEach(data) { movie in
-                        AsyncImage(url: URL(string: movie.poster)) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            Image(systemName: "movieclapper")
-                                .background(.accent.opacity(0.1))
-                        }
-                        .font(.largeTitle)
-                        .frame(width: .screenWidth - 128)
-                        .background(Color.purple.opacity(0.3))
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .scrollTransition(.interactive, axis: .horizontal) { effect, phase in
-                            effect
-                                .scaleEffect(phase.isIdentity ? 1.0 : 0.75)
+                        NavigationLink {
+                            MovieDetailsScreen(movieId: movie.id)
+                        } label: {
+                            AsyncImage(url: URL(string: movie.poster)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                Image(systemName: "movieclapper")
+                                    .background(.accent.opacity(0.1))
+                            }
+                            .font(.largeTitle)
+                            .frame(width: .screenWidth - 128)
+                            .background(Color.purple.opacity(0.3))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(radius: 8)
+                            .scrollTransition(.interactive, axis: .horizontal) { effect, phase in
+                                effect
+                                    .scaleEffect(phase.isIdentity ? 1.0 : 0.75)
+                            }
                         }
                     }
                 }
@@ -184,14 +214,18 @@ struct MoviesScreen: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                PopularMoviesSection(data: viewModel.popularMovies)
-                NowPlayingMoviesSection(data: viewModel.nowPlayingMovies)
-                UpcomingMoviesSection(data: viewModel.upcomingMovies)
-                TopRatedMoviesSection(data: viewModel.topRatedMovies)
+            if viewModel.loading {
+                ProgressView("Loading...")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .padding(.vertical)
+
+            } else {
+                MoviesView(data: viewModel.movies)
+                    .navigationTitle("Movies")
             }
-            .navigationTitle("Movies")
         }
+
         .task {
             viewModel.handleData()
         }

@@ -15,6 +15,10 @@ class MoviesViewModel: ObservableObject {
     @Published var topRatedMovies: [MovieOverviewModel] = []
     @Published var popularMovies: [MovieOverviewModel] = []
 
+    @Published var movies: [MovieCategoryOverviewModel] = []
+
+    @Published var loading: Bool = false
+
     private let service: MovieListService
 
     init() {
@@ -22,30 +26,55 @@ class MoviesViewModel: ObservableObject {
     }
 
     func handleData() {
+        loading = true
         Task(priority: .background) {
-            if let response = try? await service.getMovies(forListCategory: .nowPlaying, page: 1) {
-                nowPlayingMovies = response.results.map { result in
-                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
-                }
-            }
+            async let nowPlayingTask = try? service.getMovies(forListCategory: .nowPlaying, page: 1)
+            async let upcomingTask = try? service.getMovies(forListCategory: .upcoming, page: 1)
+            async let topRatedTask = try? service.getMovies(forListCategory: .topRated, page: 1)
+            async let popularTask = try? service.getMovies(forListCategory: .popular, page: 1)
 
-            if let response = try? await service.getMovies(forListCategory: .upcoming, page: 1) {
-                upcomingMovies = response.results.map { result in
+            let responses = await [nowPlayingTask, upcomingTask, topRatedTask, popularTask]
+            movies = responses.map { response in
+                let models = response?.results.map { result in
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
-                }
-            }
+                }.compactMap { $0 }
 
-            if let response = try? await service.getMovies(forListCategory: .topRated, page: 1) {
-                topRatedMovies = response.results.map { result in
-                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
-                }
-            }
+                if let models,
+                   let category = MovieListCategory(rawValue: response?.title ?? "") {
+                    return MovieCategoryOverviewModel(category: category, movies: models)
 
-            if let response = try? await service.getMovies(forListCategory: .popular, page: 1) {
-                popularMovies = response.results.map { result in
-                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
+                } else {
+                    return nil
                 }
-            }
+            }.compactMap { $0 }
+            
+            movies.sort { $0.category.sortIndex < $1.category.sortIndex}
+
+            loading = false
+
+//            if let response = try? await service.getMovies(forListCategory: .nowPlaying, page: 1) {
+//                nowPlayingMovies = response.results.map { result in
+//                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
+//                }
+//            }
+//
+//            if let response = try? await service.getMovies(forListCategory: .upcoming, page: 1) {
+//                upcomingMovies = response.results.map { result in
+//                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
+//                }
+//            }
+//
+//            if let response = try? await service.getMovies(forListCategory: .topRated, page: 1) {
+//                topRatedMovies = response.results.map { result in
+//                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
+//                }
+//            }
+//
+//            if let response = try? await service.getMovies(forListCategory: .popular, page: 1) {
+//                popularMovies = response.results.map { result in
+//                    MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
+//                }
+//            }
         }
     }
 }

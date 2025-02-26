@@ -11,6 +11,7 @@ import Foundation
 @MainActor
 class MovieListViewModel: ObservableObject {
     @Published var movies: [MovieOverviewModel] = []
+    @Published var loading: Bool = false
 
     private let service: MovieListService
 
@@ -25,6 +26,8 @@ class MovieListViewModel: ObservableObject {
 
     func fetchMovies() {
         guard let listCategory = listCategory else { return }
+        
+        loading = true
 
         Task {
             do {
@@ -33,10 +36,19 @@ class MovieListViewModel: ObservableObject {
                     MovieOverviewModel(id: result.id, poster: result.poster, title: result.title)
                 }
                 movies.append(contentsOf: newMovies)
+                
+                loading = false 
 
             } catch {
                 print("Error fetching movies: \(error)")
             }
+        }
+    }
+    
+    func loadMoreIfNeeded(currentItem: MovieOverviewModel) {
+        if currentItem.id == movies.last?.id {
+            currentPage += 1
+            fetchMovies()
         }
     }
 }
